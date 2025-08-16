@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سامانه حضور و غیاب</title>
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -365,6 +366,26 @@
             max-width: 90%;
             letter-spacing: 0.5px;
         }
+        
+        #install-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        
+        #install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
         @media (max-width: 480px) {
             .dev-credit {
@@ -493,81 +514,6 @@
             margin-top: 5px;
             display: none;
         }
-        
-        /* استایل جدید برای بخش IMEI */
-        .imei-section {
-            background-color: #f0f7ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            animation: slideIn 0.5s ease-out;
-            border: 1px solid #b8daff;
-        }
-        
-        .imei-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .imei-header i {
-            font-size: 24px;
-            color: #1a2980;
-            margin-left: 10px;
-        }
-        
-        .imei-data {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .imei-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #ddefff;
-        }
-        
-        .imei-item:last-child {
-            border-bottom: none;
-        }
-        
-        .imei-label {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .imei-value {
-            color: #1a2980;
-            font-weight: 500;
-            direction: ltr;
-            font-family: monospace;
-            letter-spacing: 1px;
-        }
-        
-        .imei-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .imei-status i {
-            font-size: 18px;
-        }
-        
-        .imei-status.valid {
-            color: #28a745;
-        }
-        
-        .imei-status.invalid {
-            color: #dc3545;
-        }
-        
-        .imei-status.unknown {
-            color: #6c757d;
-        }
     </style>
 </head>
 <body>
@@ -580,6 +526,9 @@
         </div>
         
         <div class="header">
+            <button id="install-btn">
+                <i class="fas fa-download"></i> نصب برنامه
+            </button>
             <h1><i class="fas fa-camera"></i> سامانه حضور و غیاب</h1>
         </div>
         
@@ -622,25 +571,6 @@
                     <li>20:00 - 20:30</li>
                     <li>22:00 - 22:30</li>
                 </ul>
-            </div>
-            
-            <!-- بخش جدید برای نمایش IMEI دستگاه -->
-            <div id="imei-section" class="imei-section">
-                <div class="imei-header">
-                    <h3><i class="fas fa-mobile-alt"></i> شناسه دستگاه (IMEI)</h3>
-                </div>
-                <div class="imei-data">
-                    <div class="imei-item">
-                        <span class="imei-label">IMEI دستگاه:</span>
-                        <span id="imei-value" class="imei-value">---</span>
-                    </div>
-                    <div class="imei-item">
-                        <span class="imei-label">وضعیت شناسه:</span>
-                        <span id="imei-status" class="imei-status unknown">
-                            <i class="fas fa-question-circle"></i> در حال بررسی
-                        </span>
-                    </div>
-                </div>
             </div>
             
             <div id="camera-section" class="camera-section">
@@ -723,17 +653,14 @@
         const statusIcon = document.getElementById('status-icon');
         const statusText = document.getElementById('status-text');
         const systemClock = document.getElementById('system-clock');
-        
-        // عناصر جدید برای IMEI
-        const imeiValue = document.getElementById('imei-value');
-        const imeiStatus = document.getElementById('imei-status');
+        const installBtn = document.getElementById('install-btn');
         
         let stream = null;
         let locationData = null;
         let currentCameraMode = "environment";
         let selectedRequestType = null;
         let debounceTimeout;
-        let deviceIMEI = "---";
+        let deferredPrompt;
         
         const allowedTimeSlots = [
             { start: { hour: 6, minute: 0 }, end: { hour: 6, minute: 30 } },
@@ -747,76 +674,41 @@
             { start: { hour: 22, minute: 0 }, end: { hour: 22, minute: 30 } }
         ];
         
+        // PWA: Handle install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+            
+            installBtn.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(choiceResult => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        } else {
+                            console.log('User dismissed the install prompt');
+                        }
+                        deferredPrompt = null;
+                        installBtn.style.display = 'none';
+                    });
+                }
+            });
+        });
+        
+        // PWA: Hide install button after app is installed
+        window.addEventListener('appinstalled', () => {
+            console.log('App installed');
+            installBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
+        
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             systemClock.textContent = `${hours}:${minutes}:${seconds}`;
-        }
-        
-        // تابع جدید برای دریافت IMEI دستگاه
-        function getDeviceIMEI() {
-            return new Promise((resolve) => {
-                try {
-                    // در محیط واقعی، این قسمت باید با API مخصوص دستگاه پر شود
-                    // این یک شبیه‌سازی برای نمایش است
-                    
-                    // برای محیط‌های مختلف شبیه‌سازی می‌کنیم
-                    if (navigator.userAgent.match(/Android/i)) {
-                        // شبیه‌سازی برای اندروید
-                        const imei = "35" + Math.floor(Math.random() * 10000000000000).toString().padStart(13, '0');
-                        resolve({imei, valid: true});
-                    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-                        // شبیه‌سازی برای iOS (در واقعیت نمی‌توان IMEI را در iOS دریافت کرد)
-                        resolve({imei: "N/A (iOS)", valid: false});
-                    } else {
-                        // سایر دستگاه‌ها
-                        resolve({imei: "N/A (Desktop)", valid: false});
-                    }
-                } catch (error) {
-                    console.error('خطا در دریافت IMEI:', error);
-                    resolve({imei: "خطا در دریافت", valid: false});
-                }
-            });
-        }
-        
-        // تابع جدید برای اعتبارسنجی IMEI با الگوریتم Luhn
-        function validateIMEI(imei) {
-            if (!imei || imei.length !== 15 || !/^\d+$/.test(imei)) {
-                return false;
-            }
-            
-            let sum = 0;
-            for (let i = 0; i < 14; i++) {
-                let digit = parseInt(imei[i]);
-                if (i % 2 === 1) {
-                    digit *= 2;
-                    if (digit > 9) {
-                        digit = digit - 9;
-                    }
-                }
-                sum += digit;
-            }
-            
-            const checksum = (10 - (sum % 10)) % 10;
-            return checksum === parseInt(imei[14]);
-        }
-        
-        // تابع جدید برای به‌روزرسانی وضعیت IMEI در رابط کاربری
-        function updateIMEIStatus(imei, valid) {
-            imeiValue.textContent = imei;
-            
-            if (valid) {
-                imeiStatus.innerHTML = '<i class="fas fa-check-circle"></i> شناسه معتبر است';
-                imeiStatus.className = 'imei-status valid';
-            } else if (imei.includes("N/A") || imei.includes("خطا")) {
-                imeiStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> شناسه در دسترس نیست';
-                imeiStatus.className = 'imei-status invalid';
-            } else {
-                imeiStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> شناسه نامعتبر است';
-                imeiStatus.className = 'imei-status invalid';
-            }
         }
         
         async function startCamera() {
@@ -1087,9 +979,6 @@
                 params.append('entry.1995166577', locationData.accuracy);
                 params.append('entry.1723693542', requestType);
                 
-                // افزودن IMEI به داده‌های ارسالی
-                params.append('entry.1234567890', deviceIMEI); // این شناسه باید با شناسه فیلد IMEI در فرم گوگل تطابق داشته باشد
-                
                 await fetch(formUrl, {
                     method: 'POST',
                     headers: {
@@ -1194,17 +1083,24 @@
             }
         }
         
+        // PWA: Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
+        
         window.addEventListener('load', () => {
             updateClock();
             const clockInterval = setInterval(updateClock, 1000);
             toggleSystemState();
             setInterval(toggleSystemState, 60000);
-            
-            // دریافت IMEI دستگاه هنگام بارگذاری صفحه
-            getDeviceIMEI().then(result => {
-                deviceIMEI = result.imei;
-                updateIMEIStatus(deviceIMEI, result.valid);
-            });
         });
     </script>
 </body>

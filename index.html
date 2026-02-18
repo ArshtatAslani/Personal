@@ -14,7 +14,7 @@
         }
 
         body {
-            background: #f0fdf4;          /* سبز خیلی روشن */
+            background: #f0fdf4;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -33,7 +33,7 @@
         }
 
         .header {
-            background: #047857;          /* سبز تیره سازمانی */
+            background: #047857;
             color: white;
             text-align: center;
             padding: 20px 16px;
@@ -71,14 +71,14 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #065f46;              /* سبز تیره */
+            color: #065f46;
         }
 
         .input-group input,
         .input-group select {
             width: 100%;
             padding: 12px 12px 12px 44px;
-            border: 1px solid #a7f3d0;   /* سبز خیلی روشن */
+            border: 1px solid #a7f3d0;
             border-radius: 10px;
             font-size: 15px;
         }
@@ -116,7 +116,7 @@
         }
 
         .btn-tertiary {
-            background: #10b981;          /* سبز accent */
+            background: #10b981;
             color: white;
             width: 100%;
             margin-top: 12px;
@@ -147,7 +147,7 @@
         .submit-btn {
             width: 100%;
             padding: 14px;
-            background: #047857;          /* سبز اصلی */
+            background: #047857;
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -186,7 +186,7 @@
         .system-disabled-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(240,253,244,0.94);  /* سبز روشن شفاف */
+            background: rgba(240,253,244,0.94);
             z-index: 100;
             display: none;
             flex-direction: column;
@@ -304,7 +304,6 @@
 </div>
 
 <script>
-<script>
 // متغیرها
 const marketingCodeInput   = document.getElementById('marketing-code');
 const marketingCodeError   = document.getElementById('marketing-code-error');
@@ -383,7 +382,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 async function fetchSpots(code) {
     try {
-        // آدرس وب‌اپ اسکریپت خودت را اینجا بگذار
+        // آدرس واقعی وب‌اپ اسکریپت خودت را جایگزین کن
         const url = `https://script.google.com/macros/s/AKfycbwnHxuCeQrHBVHpT253b23qgG0jtf-_u8JZ4nORAqjBSfnb6rPVJzPTLJblnLtLltOT/exec?code=${code}`;
         const res = await fetch(url);
         spots = await res.json();
@@ -572,7 +571,7 @@ submitBtn.addEventListener('click', async () => {
     }
 });
 
-// شروع
+// شروع برنامه
 setInterval(updateClock, 1000);
 updateClock();
 

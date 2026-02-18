@@ -14,7 +14,7 @@
         }
 
         body {
-            background: #f3f4f6;
+            background: #f0fdf4;          /* سبز خیلی روشن */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,12 +28,12 @@
             width: 100%;
             max-width: 480px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             overflow: hidden;
         }
 
         .header {
-            background: #1e40af;
+            background: #047857;          /* سبز تیره سازمانی */
             color: white;
             text-align: center;
             padding: 20px 16px;
@@ -71,23 +71,30 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #374151;
+            color: #065f46;              /* سبز تیره */
         }
 
         .input-group input,
         .input-group select {
             width: 100%;
-            padding: 12px 44px 12px 44px;
-            border: 1px solid #d1d5db;
+            padding: 12px 12px 12px 44px;
+            border: 1px solid #a7f3d0;   /* سبز خیلی روشن */
             border-radius: 10px;
             font-size: 15px;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #047857;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(4,120,87,0.15);
         }
 
         .input-group i {
             position: absolute;
             left: 14px;
             top: 38px;
-            color: #4f46e5;
+            color: #047857;
             font-size: 18px;
         }
 
@@ -95,7 +102,7 @@
             position: absolute;
             right: 14px;
             top: 38px;
-            color: #6b7280;
+            color: #065f46;
             pointer-events: none;
         }
 
@@ -108,43 +115,21 @@
             cursor: pointer;
         }
 
-        .btn-primary    { background: #1e40af; color: white; }
-        .btn-secondary  { background: #e5e7eb; color: #374151; }
-        .btn-tertiary   { background: #ea580c; color: white; width: 100%; margin-top: 12px; }
+        .btn-tertiary {
+            background: #10b981;          /* سبز accent */
+            color: white;
+            width: 100%;
+            margin-top: 12px;
+        }
 
         .btn:disabled {
             opacity: 0.55;
             cursor: not-allowed;
-        }
-
-        .camera-container {
-            width: 100%;
-            height: 220px;
-            background: #111827;
-            border-radius: 10px;
-            margin: 12px 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-        }
-
-        #camera-feed {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .camera-controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            background: #d1fae5;
         }
 
         .location-section {
-            background: #f9fafb;
+            background: #f0fdf4;
             padding: 16px;
             border-radius: 10px;
             margin: 16px 0;
@@ -154,7 +139,7 @@
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #a7f3d0;
         }
 
         .location-item:last-child { border-bottom: none; }
@@ -162,7 +147,7 @@
         .submit-btn {
             width: 100%;
             padding: 14px;
-            background: #059669;
+            background: #047857;          /* سبز اصلی */
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -173,7 +158,7 @@
         }
 
         .submit-btn:disabled {
-            background: #d1d5db;
+            background: #a7f3d0;
         }
 
         .status-message {
@@ -184,13 +169,13 @@
             display: none;
         }
 
-        .success    { background: #d1fae5; color: #065f46; }
+        .success    { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
         .error      { background: #fee2e2; color: #991b1b; }
-        .processing { background: #dbeafe; color: #1e40af; }
+        .processing { background: #ecfdf5; color: #065f46; }
 
         .time-restriction-info {
-            background: #fffbeb;
-            border-right: 4px solid #ca8a04;
+            background: #ecfdf5;
+            border-right: 4px solid #047857;
             padding: 12px;
             border-radius: 8px;
             margin: 12px 0;
@@ -201,7 +186,7 @@
         .system-disabled-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(255,255,255,0.94);
+            background: rgba(240,253,244,0.94);  /* سبز روشن شفاف */
             z-index: 100;
             display: none;
             flex-direction: column;
@@ -212,7 +197,7 @@
         }
 
         .spot-location {
-            background: #f9fafb;
+            background: #ecfdf5;
             padding: 12px;
             border-radius: 8px;
             margin: 12px 0;
@@ -229,7 +214,6 @@
 
         @media (max-width: 480px) {
             .content { padding: 16px; }
-            .camera-container { height: 180px; }
             .header h1 { font-size: 1.4rem; }
         }
     </style>
@@ -243,7 +227,7 @@
     </div>
 
     <div class="header">
-        <h1><i class="fas fa-camera"></i> سامانه حضور و غیاب</h1>
+        <h1>سامانه حضور و غیاب</h1>
     </div>
 
     <div class="content">
@@ -288,7 +272,7 @@
 
         <div id="time-restriction" class="time-restriction-info">
             <p><i class="fas fa-info-circle"></i> ثبت حضور فقط در این بازه‌ها مجاز است:</p>
-            <ul style="padding-right:20px; margin-top:8px;">
+            <ul style="padding-right:20px; margin-top:8px; list-style-type:disc;">
                 <li>۶:۰۰ - ۶:۳۰</li>
                 <li>۸:۰۰ - ۸:۳۰</li>
                 <li>۱۰:۰۰ - ۱۰:۳۰</li>
@@ -299,17 +283,6 @@
                 <li>۲۰:۰۰ - ۲۰:۳۰</li>
                 <li>۲۲:۰۰ - ۲۲:۳۰</li>
             </ul>
-        </div>
-
-        <div id="camera-section">
-            <div class="camera-container">
-                <div class="camera-placeholder">دوربین آماده نیست</div>
-                <video id="camera-feed" autoplay playsinline></video>
-            </div>
-            <div class="camera-controls">
-                <button id="start-camera" class="btn btn-primary">فعال‌سازی دوربین</button>
-                <button id="capture-btn" class="btn btn-secondary" disabled>عکس‌برداری</button>
-            </div>
         </div>
 
         <div class="location-section">
@@ -324,17 +297,15 @@
 
         <div id="status-message" class="status-message"></div>
 
-        <div style="text-align:center; margin-top:16px; font-size:13px; color:#6b7280;">
+        <div style="text-align:center; margin-top:20px; font-size:13px; color:#065f46;">
             Dev by: Snapp North Zone Sales HQ
         </div>
     </div>
 </div>
 
 <script>
-// ────────────────────────────────────────────────
-// متغیرها و ثابت‌ها
-// ────────────────────────────────────────────────
-
+<script>
+// متغیرها
 const marketingCodeInput   = document.getElementById('marketing-code');
 const marketingCodeError   = document.getElementById('marketing-code-error');
 const requestTypeSelect    = document.getElementById('request-type');
@@ -343,9 +314,6 @@ const spotSelect           = document.getElementById('spot-select');
 const spotLocation         = document.getElementById('spot-location');
 const spotLat              = document.getElementById('spot-lat');
 const spotLong             = document.getElementById('spot-long');
-const startCameraBtn       = document.getElementById('start-camera');
-const captureBtn           = document.getElementById('capture-btn');
-const cameraFeed           = document.getElementById('camera-feed');
 const submitBtn            = document.getElementById('submit-btn');
 const statusMessage        = document.getElementById('status-message');
 const latitudeValue        = document.getElementById('latitude-value');
@@ -357,11 +325,9 @@ const systemDisabledOverlay= document.getElementById('system-disabled-overlay');
 const systemStatus         = document.getElementById('system-status');
 const systemClock          = document.getElementById('system-clock');
 
-let stream = null;
 let locationData = null;
 let spots = [];
 let selectedSpot = null;
-let currentCameraMode = "environment";
 let selectedRequestType = null;
 let debounceTimeout;
 
@@ -377,10 +343,7 @@ const allowedTimeSlots = [
     { start: { h:22, m:0  }, end: { h:22,m:30 } }
 ];
 
-// ────────────────────────────────────────────────
 // توابع کمکی
-// ────────────────────────────────────────────────
-
 function updateClock() {
     const n = new Date();
     systemClock.textContent = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`;
@@ -389,7 +352,7 @@ function updateClock() {
 function isInDisabledTime() {
     const n = new Date();
     const m = n.getHours() * 60 + n.getMinutes();
-    return m >= 30 && m < 300;   // 00:30 تا 05:30
+    return m >= 30 && m < 330;   // 00:30 تا 05:30
 }
 
 function isWithinAllowedTime() {
@@ -420,6 +383,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 async function fetchSpots(code) {
     try {
+        // آدرس وب‌اپ اسکریپت خودت را اینجا بگذار
         const url = `https://script.google.com/macros/s/AKfycbwnHxuCeQrHBVHpT253b23qgG0jtf-_u8JZ4nORAqjBSfnb6rPVJzPTLJblnLtLltOT/exec?code=${code}`;
         const res = await fetch(url);
         spots = await res.json();
@@ -501,10 +465,7 @@ function validateForm() {
     submitBtn.disabled = !(validCode && hasLoc && hasType && hasSpot && sameType);
 }
 
-// ────────────────────────────────────────────────
 // Event Listener ها
-// ────────────────────────────────────────────────
-
 marketingCodeInput.addEventListener('input', function() {
     this.value = this.value.replace(/\D/g,'').slice(0,5);
     const code = this.value.trim();
@@ -528,11 +489,7 @@ requestTypeSelect.addEventListener('change', function() {
     getLocationBtn.disabled = false;
     getLocationBtn.innerHTML = '<i class="fas fa-location-arrow"></i> دریافت موقعیت جغرافیایی';
 
-    if (this.value === 'ثبت حضور') {
-        timeRestrictionInfo.style.display = 'block';
-    } else {
-        timeRestrictionInfo.style.display = 'none';
-    }
+    timeRestrictionInfo.style.display = (this.value === 'ثبت حضور') ? 'block' : 'none';
 
     validateForm();
 });
@@ -553,7 +510,8 @@ spotSelect.addEventListener('change', function() {
 getLocationBtn.addEventListener('click', getLocation);
 
 submitBtn.addEventListener('click', async () => {
-    if (!validateMarketingCode(marketingCodeInput.value.trim())) return;
+    const code = marketingCodeInput.value.trim();
+    if (!validateMarketingCode(code)) return;
     if (!requestTypeSelect.value) return;
     if (requestTypeSelect.value !== selectedRequestType) {
         showStatus('نوع درخواست تغییر کرده - لطفاً موقعیت را مجدداً بگیرید', 'error');
@@ -586,7 +544,7 @@ submitBtn.addEventListener('click', async () => {
     try {
         const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdY70VGHakFIzh9zjWbfZ2T-tBqUg3xtNEZwG4drNpjnbwrjg/formResponse';
         const data = new URLSearchParams();
-        data.append('entry.1228562108', marketingCodeInput.value.trim());
+        data.append('entry.1228562108', code);
         data.append('entry.2093256559', locationData.latitude);
         data.append('entry.1314182104', locationData.longitude);
         data.append('entry.1995166577', locationData.accuracy);
@@ -614,10 +572,7 @@ submitBtn.addEventListener('click', async () => {
     }
 });
 
-// ────────────────────────────────────────────────
-// شروع برنامه
-// ────────────────────────────────────────────────
-
+// شروع
 setInterval(updateClock, 1000);
 updateClock();
 
@@ -631,7 +586,6 @@ function checkSystemState() {
         requestTypeSelect.disabled = true;
         getLocationBtn.disabled = true;
         submitBtn.disabled = true;
-        if (document.getElementById('start-camera')) document.getElementById('start-camera').disabled = true;
     } else {
         marketingCodeInput.disabled = false;
         requestTypeSelect.disabled = false;
